@@ -11,6 +11,21 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   if (!isOpen) return null;
 
   const handlePrint = () => {
+    const html = document.documentElement;
+    const wasDark = html.classList.contains('dark');
+
+    const beforePrint = () => {
+      if (wasDark) html.classList.remove('dark');
+    };
+
+    const afterPrint = () => {
+      if (wasDark) html.classList.add('dark');
+      window.removeEventListener('beforeprint', beforePrint);
+      window.removeEventListener('afterprint', afterPrint);
+    };
+
+    window.addEventListener('beforeprint', beforePrint);
+    window.addEventListener('afterprint', afterPrint);
     window.print();
   };
 
@@ -29,7 +44,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
       .join('\n\n');
 
     const experienceSection = RESUME_DATA.experience
-      .map(e => `### ${e.role} — ${e.company}\n*${e.period} | ${e.location}*\n\n${e.description}\n\n${e.highlights.map(h => `- ${h}`).join('\n')}`)
+      .map(e => `### ${e.role} — ${e.company}\n*${e.period} | ${e.location}*\n\n${e.description}`)
       .join('\n\n');
 
     const educationSection = RESUME_DATA.education
@@ -69,7 +84,7 @@ ${educationSection}
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
       <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl overflow-hidden">
-        
+
         {/* Header Controls */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/80 print-hide">
           <div>
@@ -104,8 +119,8 @@ ${educationSection}
         </div>
 
         {/* Resume Content Body */}
-        <div id="resume-printable-content" className="p-6 sm:p-8 overflow-y-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans text-xs sm:text-sm space-y-4">
-          
+        <div id="resume-printable-content" className="p-6 sm:p-8 overflow-y-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans text-sm space-y-4">
+
           {/* Header */}
           <div className="text-center pb-3 border-b border-slate-200 dark:border-slate-800">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-0.5">
@@ -169,52 +184,41 @@ ${educationSection}
             </div>
           )}
 
-          {/* Projects */}
-          <div>
-            <h2 className="text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider mb-2 border-b border-slate-200 dark:border-slate-800 pb-1">
-              Key GenAI Projects
-            </h2>
-            <div className="space-y-3">
-              {RESUME_DATA.projects.filter(p => p.id !== 'project-3').map((proj, idx) => (
-                <div key={idx} className="space-y-1">
-                  <div className="flex justify-between items-baseline flex-wrap gap-1">
-                    <span className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">{proj.title}</span>
-                    <span className="text-xs font-mono text-slate-500 dark:text-slate-400">{proj.company} | {proj.period}</span>
-                  </div>
-                  <ul className="list-disc list-outside pl-4 space-y-0.5 text-slate-700 dark:text-slate-300 text-xs sm:text-sm">
-                    {proj.bullets.map((b, bIdx) => (
-                      <li key={bIdx} className="leading-tight">{b}</li>
-                    ))}
-                  </ul>
-                  <div className="text-[11px] text-slate-500 font-mono">
-                    <strong className="text-slate-700 dark:text-slate-300">Tech Stack:</strong> {proj.stack.join(', ')}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Work Experience */}
+          {/* Work Experience — company projects nested within */}
           <div>
             <h2 className="text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider mb-1.5 border-b border-slate-200 dark:border-slate-800 pb-1">
               Work Experience
             </h2>
-            {RESUME_DATA.experience.map((exp, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="flex justify-between items-baseline flex-wrap gap-1">
-                  <span className="font-bold text-slate-900 dark:text-white">{exp.role} — {exp.company}</span>
-                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400">{exp.period} · {exp.location}</span>
+            {RESUME_DATA.experience.map((exp, idx) => {
+              const companyProjects = RESUME_DATA.projects.filter(
+                p => p.company === exp.company && p.id !== 'project-3'
+              );
+              return (
+                <div key={idx} className="space-y-2">
+                  {/* Role header */}
+                  <div className="flex justify-between items-baseline flex-wrap gap-1">
+                    <span className="font-bold text-slate-900 dark:text-white">{exp.role} — {exp.company}</span>
+                    <span className="text-xs font-mono text-slate-500 dark:text-slate-400">{exp.period} · {exp.location}</span>
+                  </div>
+                  <p className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-tight">{exp.description}</p>
+
+                  {/* Nested project sub-entries */}
+                  {companyProjects.map((proj, pIdx) => (
+                    <div key={pIdx} className="space-y-0.5 pl-3 border-l-2 border-slate-300 dark:border-slate-600">
+                      <div className="flex justify-between items-baseline flex-wrap gap-1">
+                        <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs">{proj.title}</span>
+                        <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">{proj.period}</span>
+                      </div>
+                      <ul className="list-disc list-outside pl-4 space-y-0.5 text-slate-700 dark:text-slate-300 text-xs">
+                        {proj.bullets.map((b, bIdx) => (
+                          <li key={bIdx} className="leading-tight">{b}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-tight">{exp.description}</p>
-                {exp.highlights && (
-                  <ul className="list-disc list-outside pl-4 space-y-0.5 text-slate-700 dark:text-slate-300 text-xs sm:text-sm">
-                    {exp.highlights.map((h, hIdx) => (
-                      <li key={hIdx} className="leading-tight">{h}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Education */}
@@ -227,9 +231,10 @@ ${educationSection}
                 <div key={idx} className="flex justify-between items-baseline flex-wrap gap-1 text-xs sm:text-sm">
                   <div>
                     <span className="font-semibold text-slate-900 dark:text-white">{edu.degree}</span>
-                    <span className="text-slate-500 text-xs font-normal"> ({edu.focus})</span>
                   </div>
-                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">{edu.institution}, {edu.location}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                    {edu.institution}, {edu.location}{edu.period ? ` · ${edu.period}` : ''}
+                  </span>
                 </div>
               ))}
             </div>

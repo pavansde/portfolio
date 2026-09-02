@@ -44,21 +44,9 @@ export const ExperienceEducation: React.FC = () => {
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                     {exp.description}
                   </p>
-
-                  {/* Highlight Bullets */}
-                  {exp.highlights && (
-                    <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-slate-800/60">
-                      {exp.highlights.map((h, hIdx) => (
-                        <div key={hIdx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                          <span>{h}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -81,20 +69,22 @@ export const ExperienceEducation: React.FC = () => {
                   key={idx}
                   className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/90 shadow-xs"
                 >
-                  <span className="text-[10px] font-mono font-bold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider block mb-1">
-                    {idx === 0 ? 'Post-Graduate Degree' : 'Undergraduate Degree'}
-                  </span>
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-[10px] font-mono font-bold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider block">
+                      {idx === 0 ? 'Post-Graduate Degree' : 'Undergraduate Degree'}
+                    </span>
+                    {edu.period && (
+                      <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                        {edu.period}
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base mb-1">
                     {edu.degree}
                   </h3>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                  <div className="text-xs text-slate-600 dark:text-slate-400">
                     {edu.institution}, {edu.location}
                   </div>
-                  {edu.focus && (
-                    <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/70 px-2.5 py-1 rounded">
-                      Focus: {edu.focus}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
