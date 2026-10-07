@@ -109,6 +109,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
     background: none !important;
     padding: 0 !important;
     display: block !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    animation: none !important;
+    transform: none !important;
   }
 
   .max-w-4xl {
@@ -123,6 +128,9 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   #resume-printable-content {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
     padding: 0 !important;
     background: white !important;
     background-color: white !important;
@@ -134,10 +142,15 @@ html.light ::-webkit-scrollbar-thumb:hover {
 
   /* Force light theme on every child — white bg prevents dark bleed-through */
   #resume-printable-content * {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
     color: #0f172a !important;
     background-color: white !important;
     border-color: #cbd5e1 !important;
     box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
   }
 
   /* Restore link colours */

@@ -1,6 +1,7 @@
 import React from 'react';
 import { RESUME_DATA } from '../data/portfolioData';
-import { X, Download, Printer } from 'lucide-react';
+import { X, Download } from 'lucide-react';
+import { generateResumePdf } from '../utils/generateResumePdf';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -9,77 +10,6 @@ interface ResumeModalProps {
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-
-  const handlePrint = () => {
-    const html = document.documentElement;
-    const wasDark = html.classList.contains('dark');
-
-    const beforePrint = () => {
-      if (wasDark) html.classList.remove('dark');
-    };
-
-    const afterPrint = () => {
-      if (wasDark) html.classList.add('dark');
-      window.removeEventListener('beforeprint', beforePrint);
-      window.removeEventListener('afterprint', afterPrint);
-    };
-
-    window.addEventListener('beforeprint', beforePrint);
-    window.addEventListener('afterprint', afterPrint);
-    window.print();
-  };
-
-  const handleDownloadMarkdown = () => {
-    const skillsSection = RESUME_DATA.skills
-      .map(s => `- **${s.category}:** ${s.items.join(', ')}`)
-      .join('\n');
-
-    const certsSection = RESUME_DATA.certifications && RESUME_DATA.certifications.length > 0
-      ? RESUME_DATA.certifications.map(c => `- **${c.name}** — ${c.issuer}: ${c.description}`).join('\n')
-      : '';
-
-    const projectsSection = RESUME_DATA.projects
-      .filter(p => p.id !== 'project-3')
-      .map(p => `### ${p.title}\n*${p.company} | ${p.period}*\n\n${p.bullets.map(b => `- ${b}`).join('\n')}\n\n**Tech Stack:** ${p.stack.join(', ')}`)
-      .join('\n\n');
-
-    const experienceSection = RESUME_DATA.experience
-      .map(e => `### ${e.role} — ${e.company}\n*${e.period} | ${e.location}*\n\n${e.description}`)
-      .join('\n\n');
-
-    const educationSection = RESUME_DATA.education
-      .map(ed => `- **${ed.degree}** — ${ed.institution}, ${ed.location}`)
-      .join('\n');
-
-    const md = `# ${RESUME_DATA.name}
-**${RESUME_DATA.title}**
-${RESUME_DATA.phone} | ${RESUME_DATA.email} | ${RESUME_DATA.linkedin} | ${RESUME_DATA.github} | ${RESUME_DATA.location}
-
-## PROFESSIONAL SUMMARY
-${RESUME_DATA.summary}
-
-## TECHNICAL SKILLS
-${skillsSection}
-${certsSection ? `\n## CERTIFICATIONS\n${certsSection}` : ''}
-
-## PROJECTS
-${projectsSection}
-
-## WORK EXPERIENCE
-${experienceSection}
-
-## EDUCATION
-${educationSection}
-`;
-
-    const blob = new Blob([md], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Pavan_Kumar_Reddy_Puli_Resume.md`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
@@ -93,25 +23,21 @@ ${educationSection}
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Single Unified Download Resume Action */}
             <button
-              onClick={handleDownloadMarkdown}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium border border-slate-300 dark:border-slate-700 transition-colors shadow-xs"
-              title="Download Markdown"
+              id="modal-download-resume-btn"
+              onClick={generateResumePdf}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-500 dark:hover:bg-cyan-400 text-white dark:text-slate-950 text-xs font-bold transition-all shadow-xs hover:shadow-sm active:scale-95"
+              title="Download ATS-Friendly Resume PDF"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Download</span>
+              <span>Download Resume</span>
             </button>
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-500 dark:hover:bg-cyan-400 text-white dark:text-slate-950 text-xs font-bold transition-colors shadow-xs"
-              title="Print / Save as PDF"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print / PDF</span>
-            </button>
+
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors ml-1"
+              title="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
