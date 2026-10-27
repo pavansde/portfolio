@@ -116,15 +116,41 @@ html.light ::-webkit-scrollbar-thumb:hover {
     transform: none !important;
   }
 
-  .max-w-4xl {
+  .fixed,
+  .fixed.inset-0,
+  .max-w-4xl,
+  #resume-printable-content {
     max-width: 100% !important;
     width: 100% !important;
     border: none !important;
+    border-width: 0 !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
     box-shadow: none !important;
+    outline: none !important;
     max-height: none !important;
     background: white !important;
     background-color: white !important;
     overflow: visible !important;
+  }
+
+  /* Ensure no border appears below the last section (Education) */
+  #resume-printable-content > div:last-child {
+    border: none !important;
+    border-bottom: none !important;
+    border-bottom-width: 0 !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #resume-printable-content > div:last-child * {
+    border-bottom: none !important;
+  }
+
+  #resume-printable-content > div:last-child h2 {
+    border-bottom: 1px solid #94a3b8 !important;
   }
 
   #resume-printable-content {

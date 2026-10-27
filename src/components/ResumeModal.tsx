@@ -84,8 +84,8 @@ ${educationSection}
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150 print:static print:p-0 print:bg-transparent print:backdrop-blur-none">
+      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 print:border-none print:border-0 print:shadow-none print:rounded-none w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl overflow-hidden print:overflow-visible">
 
         {/* Header Controls */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/80 print-hide">
@@ -125,7 +125,7 @@ ${educationSection}
         </div>
 
         {/* Resume Content Body */}
-        <div id="resume-printable-content" className="p-6 sm:p-8 overflow-y-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans text-sm space-y-4">
+        <div id="resume-printable-content" className="p-6 sm:p-8 print:p-0 print:border-none print:shadow-none overflow-y-auto bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans text-sm space-y-4">
 
           {/* Header */}
           <div className="text-center pb-3 border-b border-slate-200 dark:border-slate-800">
