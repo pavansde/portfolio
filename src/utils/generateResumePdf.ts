@@ -195,72 +195,59 @@ class ATSPdfBuilder {
 
   // Build binary PDF string and return as Uint8Array
   public buildPdf(): Uint8Array {
-    const objects: string[] = [];
-    const offsets: number[] = [];
+    const pageCount = this.pages.length;
+    const catalogObjId = 1;
+    const pagesObjId = 2;
+    const fontBoldObjId = 3;
+    const fontRegularObjId = 4;
+    const fontItalicObjId = 5;
 
-    // Helper to add object
-    const addObject = (content: string) => {
-      objects.push(content);
-      return objects.length; // 1-indexed object ID
-    };
+    const streamObjIds: number[] = [];
+    for (let i = 0; i < pageCount; i++) {
+      streamObjIds.push(6 + i);
+    }
+
+    const pageObjIds: number[] = [];
+    for (let i = 0; i < pageCount; i++) {
+      pageObjIds.push(6 + pageCount + i);
+    }
+
+    const allObjects: string[] = [];
 
     // 1: Catalog
+    allObjects.push(`<< /Type /Catalog /Pages ${pagesObjId} 0 R >>`);
+
     // 2: Pages
+    const kidsStr = pageObjIds.map(id => `${id} 0 R`).join(' ');
+    allObjects.push(`<< /Type /Pages /Kids [${kidsStr}] /Count ${pageCount} >>`);
+
     // 3: Font F1 (Helvetica-Bold)
+    allObjects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>`);
+
     // 4: Font F2 (Helvetica)
+    allObjects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>`);
+
     // 5: Font F3 (Helvetica-Oblique)
-    // Following objects: Page objects & Content stream objects
+    allObjects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>`);
 
-    const fontBoldObjId = addObject(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>`);
-    const fontRegularObjId = addObject(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>`);
-    const fontItalicObjId = addObject(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>`);
-
-    const pageCount = this.pages.length;
-    const pageObjIds: number[] = [];
-    const streamObjIds: number[] = [];
-
-    // Create placeholder for Pages object id
-    const pagesObjId = 2;
-
-    // Build streams and page objects
+    // 6 .. 5 + pageCount: Content Streams
     for (let i = 0; i < pageCount; i++) {
       const streamContent = this.pages[i].join('\n');
       const streamBytes = new TextEncoder().encode(streamContent);
-      
-      const streamObjId = addObject(
-        `<< /Length ${streamBytes.length} >>\nstream\n${streamContent}\nendstream`
-      );
-      streamObjIds.push(streamObjId);
+      allObjects.push(`<< /Length ${streamBytes.length} >>\nstream\n${streamContent}\nendstream`);
     }
 
+    // 6 + pageCount .. 5 + 2 * pageCount: Page Objects
     for (let i = 0; i < pageCount; i++) {
-      const pageObjId = addObject(
+      allObjects.push(
         `<< /Type /Page /Parent ${pagesObjId} 0 R /MediaBox [0 0 ${this.pageWidth} ${this.pageHeight}] ` +
         `/Contents ${streamObjIds[i]} 0 R ` +
         `/Resources << /Font << /F1 ${fontBoldObjId} 0 R /F2 ${fontRegularObjId} 0 R /F3 ${fontItalicObjId} 0 R >> >> >>`
       );
-      pageObjIds.push(pageObjId);
     }
-
-    // Now insert Pages object (ID 2) and Catalog (ID 1)
-    const kidsStr = pageObjIds.map(id => `${id} 0 R`).join(' ');
-    const pagesObjContent = `<< /Type /Pages /Kids [${kidsStr}] /Count ${pageCount} >>`;
-    const catalogObjContent = `<< /Type /Catalog /Pages ${pagesObjId} 0 R >>`;
-
-    // Reassemble in order:
-    // Obj 1: Catalog
-    // Obj 2: Pages
-    // Then rest of objects
-    const allObjects: string[] = [
-      catalogObjContent,
-      pagesObjContent,
-      ...objects
-    ];
 
     // Build final output buffer
     let pdfText = '%PDF-1.4\n%\xE2\xE3\xCF\xD3\n';
-    
-    // We will compute byte offsets
     const encoder = new TextEncoder();
     let currentByteOffset = encoder.encode(pdfText).length;
 
@@ -284,7 +271,7 @@ class ATSPdfBuilder {
     }
 
     const trailerText =
-      `trailer\n<< /Size ${allObjects.length + 1} /Root 1 0 R >>\n` +
+      `trailer\n<< /Size ${allObjects.length + 1} /Root ${catalogObjId} 0 R >>\n` +
       `startxref\n${startXrefOffset}\n%%EOF\n`;
 
     pdfText += xrefText + trailerText;
