@@ -13,19 +13,14 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   const handlePrint = () => {
     const html = document.documentElement;
     const wasDark = html.classList.contains('dark');
+    if (wasDark) html.classList.remove('dark');
 
-    const beforePrint = () => {
-      if (wasDark) html.classList.remove('dark');
-    };
-
-    const afterPrint = () => {
+    const restoreTheme = () => {
       if (wasDark) html.classList.add('dark');
-      window.removeEventListener('beforeprint', beforePrint);
-      window.removeEventListener('afterprint', afterPrint);
+      window.removeEventListener('afterprint', restoreTheme);
     };
 
-    window.addEventListener('beforeprint', beforePrint);
-    window.addEventListener('afterprint', afterPrint);
+    window.addEventListener('afterprint', restoreTheme);
     window.print();
   };
 
