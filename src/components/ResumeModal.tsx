@@ -79,8 +79,8 @@ ${educationSection}
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150 print:static print:p-0 print:bg-transparent print:backdrop-blur-none">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 print:border-none print:border-0 print:shadow-none print:rounded-none w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl overflow-hidden print:overflow-visible">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 dark:bg-black/80 backdrop-blur-xs animate-in fade-in duration-150 print:static print:inset-auto print:p-0 print:m-0 print:bg-transparent print:backdrop-blur-none print:w-full print:h-auto print:block">
+      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 print:bg-transparent print:border-none print:border-0 print:shadow-none print:rounded-none print:p-0 print:m-0 print:w-full print:h-auto print:max-h-none print:block w-full max-w-4xl max-h-[90vh] rounded-xl flex flex-col shadow-2xl overflow-hidden print:overflow-visible">
 
         {/* Header Controls */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/80 print-hide">
