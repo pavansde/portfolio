@@ -141,7 +141,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                   <span className="text-purple-400">"inference_serving"</span>: <span className="text-cyan-300">"FastAPI SSE Streaming · Redis Rate Limit"</span>,
                 </div>
                 <div>
-                  <span className="text-purple-400">"performance_p95"</span>: <span className="text-amber-300">"&lt;350ms P95 retrieval · 1.5k+ daily queries"</span>,
+                  <span className="text-purple-400">"performance_p95"</span>: <span className="text-amber-300">"&lt;350ms P95 retrieval · 500+ daily queries"</span>,
                 </div>
                 <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500">
                   <span className="flex items-center gap-1">

@@ -1,19 +1,19 @@
 export const RESUME_DATA = {
   name: "PAVAN KUMAR REDDY PULI",
   title: "GenAI Engineer — LLM Pipelines & Agentic Systems",
-  tagline: "Shipping production-grade GenAI: hybrid RAG at 1.5k+ daily queries · LangGraph stateful agents · Celery async ingestion · cloud-native AWS deployment.",
+  tagline: "Shipping production-grade GenAI: hybrid RAG at 500+ daily queries · LangGraph stateful agents · Celery async ingestion · cloud-native AWS deployment.",
   focus: "Production RAG • LangGraph Agents • Celery Async Pipelines • AWS EKS & CI/CD • LLM Observability",
   phone: "+91 8121692747",
   email: "pavan.sde1@gmail.com",
   linkedin: "https://www.linkedin.com/in/pavankumarreddypuli/",
   github: "https://github.com/pavansde",
   location: "Bengaluru, India",
-  summary: "GenAI Engineer specializing in production LLM systems, agentic RAG pipelines, and cloud-native AI deployment for Hospital Management Systems (HMS). Architected GIN + pgvector hybrid RAG serving 1,500+ daily clinical queries at <350ms P95 latency across 500k+ vector chunks. Built Celery & Redis async ingestion pipelines (25k+ medical records) and stateful LangGraph agentic workflows with human-in-the-loop approval checkpoints.",
+  summary: "GenAI Engineer specializing in production LLM systems, agentic RAG pipelines, and cloud-native AI deployment for Hospital Management Systems (HMS). Architected GIN + pgvector hybrid RAG serving 500+ daily clinical queries at <350ms P95 latency across 100k+ vector chunks. Built Celery & Redis async ingestion pipelines (5-10k+ medical records) and stateful LangGraph agentic workflows with human-in-the-loop approval checkpoints.",
 
   keyMetrics: [
-    { label: "Daily RAG Queries", value: "1.5k+", sub: "<350ms P95 retrieval latency", icon: "Zap" },
-    { label: "Async Record Ingestion", value: "25k+", sub: "medical records via Celery + Redis", icon: "Target" },
-    { label: "pgvector Vector Scale", value: "500k+", sub: "deduplicated chunks across workspaces", icon: "ShieldCheck" },
+    { label: "Daily RAG Queries", value: "500+", sub: "<350ms P95 retrieval latency", icon: "Zap" },
+    { label: "Async Record Ingestion", value: "5-10k+", sub: "medical records via Celery + Redis", icon: "Target" },
+    { label: "pgvector Vector Scale", value: "100k+", sub: "deduplicated chunks across workspaces", icon: "ShieldCheck" },
     { label: "Agentic Control", value: "Human-in-the-Loop", sub: "LangGraph stateful workflow with HITL", icon: "TrendingUp" },
   ],
 
@@ -74,18 +74,18 @@ export const RESUME_DATA = {
         "LangSmith Execution & Latency Tracing"
       ],
       metrics: [
-        { label: "Ingestion Scale", value: "25k+ Records", detail: "500k+ chunks indexed via Celery + Redis" },
-        { label: "Query Workload", value: "1.5k+ Daily Queries", detail: "<350ms P95 retrieval latency" },
+        { label: "Ingestion Scale", value: "5-10k+ Records", detail: "100k+ chunks indexed via Celery + Redis" },
+        { label: "Query Workload", value: "500+ Daily Queries", detail: "<350ms P95 retrieval latency" },
         { label: "Agent Control Loop", value: "Human-in-the-Loop", detail: "HITL validation checkpoints for clinical actions" }
       ],
       challenge: "Preventing cross-patient data leakage in a multi-tenant clinical RAG agent embedded within Hospital Management System (HMS) software, while handling long-running vectorization jobs and multi-step clinical reasoning loops.",
       solution: "Engineered a stateful LangGraph agentic workflow with persistent memory, HITL validation checkpoints, and composite patient+hospital vector keying in pgvector. Built asynchronous ingestion pipelines using Celery & Redis (`run_background_ingestion_task`) to offload document parsing and chunk embedding generation from main request threads.",
       bullets: [
         "Architected stateful LangGraph agentic workflows with persistent memory and human-in-the-loop (HITL) approval checkpoints for multi-step clinical reasoning and query orchestration.",
-        "Engineered asynchronous document ingestion pipelines using Celery and Redis (`run_background_ingestion_task`) to process 25,000+ medical records into 500,000+ pgvector chunks with per-patient deduplication.",
+        "Engineered asynchronous document ingestion pipelines using Celery and Redis (`run_background_ingestion_task`) to process 5000 - 10,000+ medical records into 100,000+ pgvector chunks with per-patient deduplication.",
         "Integrated pre-prompt PII masking regex and entity sanitization to strip sensitive patient identifiers prior to dispatching context to cloud LLM APIs.",
         "Enforced strict output parsing and parameter validation using Pydantic & Instructor to guarantee deterministic JSON schemas for agent tool invocation chains.",
-        "Enforced HIPAA-aligned multi-tenant isolation in pgvector storage via composite `hospital_id + patient_id` vector keying within HMS infrastructure, serving 1,500+ daily clinical queries at <350ms P95 retrieval latency."
+        "Enforced HIPAA-aligned multi-tenant isolation in pgvector storage via composite `hospital_id + patient_id` vector keying within HMS infrastructure, serving 500+ daily clinical queries at <350ms P95 retrieval latency."
       ],
       stack: ["LangGraph", "LangChain", "Celery", "Redis", "pgvector", "Pydantic", "Instructor", "AWS Bedrock", "OpenAI GPT-4o", "LangSmith", "FastAPI", "Python"]
     },
